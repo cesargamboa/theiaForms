@@ -1,113 +1,38 @@
-import {Airtable} from "airtable"
-const verifyUser=()=>{
+import Airtable from "airtable"
 
-    var Airtable = require('airtable');
-    var base = new Airtable({apiKey: 'keyNmRNp3M2oIpnfF'}).base('app4MqpvYJy5fPAhr');
-    // base('Usuarios').find('recBE7IEqUY9gaTCl', function(err, record) {
-    //     if (err) { console.error(err); return; }
-    //     console.log('Retrieved', record);
-    // });
-    Airtable.configure({
-        endpointUrl: 'https://api.airtable.com',
-        apiKey: 'keyD5lG9mCvgYDBUX'
-    });
-    // const base = Airtable.base('appyoqS2nC185S6HQ');
-    const base = Airtable.base('appqBBlWTvjF83U1J');
-    export const authenticate = (userName, passwordInput) => {
-        // gotta do searh using username
-        // return user not found if not username
-        // work on reducers to fix object
-        // if pending, show loading icon
-        let found = false;
-        return (dispatch) => {
-            dispatch({ type: "getting_data", status: "pending" })
-            base('USERS').select({
-          filterByFormula: `{usuario} = "${userName}"`
-        }).eachPage(function page(records, fetchNextPage) {
-            records.forEach(function(record) {
-                const password =  record.get('password');
-                    if(password === passwordInput){
-                        const linkEmbarque =  record.get('linkEmbarque');
-                        const nombreUsuario = record.get('fullName');
-                        const usuario = record.get('usuario');
-                        const linkNewEmbarque =  record.get('linkNewEmbarque');
-                        const userType = record.get('userType');
-                        const status = record.get('status');
-                        if(status === 'Inactivo'){
-                            found = true;
-                            dispatch({
-                                type: AUTH_USER,
-                                error: 'El usuario esta inactivo'
-                            })
-                        }
-                        else{
-                            found = true;
-                            dispatch( {
-                                type: AUTH_USER,
-                                payload: {
-                                    usuario: usuario,
-                                linkEmbarque: linkEmbarque,
-                                fullName: nombreUsuario,
-                                linkNewEmbarque: linkNewEmbarque,
-                                userType: userType,
-                                }
-                            } )
-                        }
-                    }
-                    if(password !== passwordInput){
-                        found = true;
-                        dispatch({
-                            type: AUTH_USER,
-                            error: 'Contrasena incorrecta'
-                        })
-                    }
-            });
-            fetchNextPage();
-        }, function done(err) {
-            if(!found){
-                dispatch({
-                    type: AUTH_USER,
-                    error: 'usuario no registrado',
-                })
+Airtable.configure({
+    endpointUrl: 'https://api.airtable.com',
+    apiKey: 'keyNmRNp3M2oIpnfF'
+});
+
+const base = Airtable.base('app4MqpvYJy5fPAhr')
+
+export const authenticate = (userName, passwordInput) => {
+    console.log("aqui",userName,passwordInput)
+    let found = false
+    base("Usuarios").select({
+        filterByFormula: `{Usuario} = "${userName}"`
+    }).eachPage(function page(records, fetchNextPage) {
+        records.forEach(function (record) {
+            console.log("aqui2")
+            const password = record.get('password');
+            console.log("aqui3",password,userName,passwordInput)
+            if (password === passwordInput) {
+                if (status === 'Inactivo') {
+                    found = true;
+                    console.log('inactivo')
+                }
+                else {
+                    found = true;
+                    console.log('found')
+                }
             }
-            if (err) { console.error(err); return { error: 'Problema con la base de datos'}; }
-        })
-        }
-    };
-    // const getData = async (userName, pass) => {
-    // 	await base('Usuarios').select({
-    // 		filterByFormula: `{password} = "${pass}"`
-    // }).eachPage(function page(records, fetchNextPage) {
-    // 	records.forEach(function(record) {
-    // 		const usuario =  record.get('usuario');
-    // 			if(usuario === userName){
-    // 				const linkEmbarque =  record.get('linkEmbarque');
-    // 				const nombreUsuario = record.get('fullName');
-    // 				const status = record.get('status');
-    // 				if(status === 'Inactivo'){
-    // 					return{
-    // 						error: 'El usuario esta inactivo'
-    // 					}
-    // 				}
-    // 				else{
-    // 					return {
-    // 						usuario: usuario,
-    // 						linkEmbarque: linkEmbarque,
-    // 						fullName: nombreUsuario,
-    // 					} 
-    // 				}
-    // 			}
-    // 			else{
-    // 				return {
-    // 					error: 'Contrasena o usuario no registrado'
-    // 				}
-    // 			}
-    // 	});
-    // 	fetchNextPage();
-    // }, function done(err) {
-    // 	if (err) { console.error(err); return { error: 'Problema con la base de datos'}; }
-    // })
-    // }
-
-}    
-export default verifyUser
+            if (password !== passwordInput) {
+                found = true;
+                console.log('contrasena incorrecta')
+            }
+        });
+        fetchNextPage();
+    }, (err) => console.log(err))
+}
+export default authenticate
