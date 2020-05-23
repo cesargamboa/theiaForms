@@ -3,13 +3,13 @@ import MapView from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 
 export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <MapView style={styles.mapStyle} showsUserLocation={true}/>
-      </View>
-    );
-  }
+  // render() {
+  //   return (
+  //     <View style={styles.container}>
+  //       <MapView style={styles.mapStyle} showsUserLocation={true}/>
+  //     </View>
+  //   );
+  // }
 }
 
 const styles = StyleSheet.create({

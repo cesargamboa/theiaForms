@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { TextInput, Text, View, Image,StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import verifyUser from './auth'
 
 export default function UselessTextInput(props) {
   const [user, onChangeUser] = React.useState('');
   const [password, onChangePass] = React.useState('');
-const submitForm = () => {}
+const submitForm = () => {
+  verifyUser();
+  // props.navigation.navigate('Home')
+}
   return (
     <View style={styles.container}>
     <LinearGradient
@@ -21,7 +25,7 @@ const submitForm = () => {}
     <Image source={require('../../assets/theia-track1-01.png')}
   style={{ width: 110, height: 50.5, marginTop: -100, marginBottom: 30, position: 'relative' }}></Image>
     <View style={styles.inputStyle}>
-    <Text>Usuario</Text>
+    <Text>user</Text>
     <TextInput
       style={{ height: 40, width: 250, borderBottomColor: '#8fd3f4', borderBottomWidth: 1 }}
       onChangeText={user => onChangeUser(user)}
@@ -40,7 +44,7 @@ const submitForm = () => {}
     <View>
     <TouchableOpacity
         style={styles.submitButton}
-        onPress={() => props.navigation.navigate('Home')}
+        onPress={submitForm}
       >
         <Text style={styles.textButton}>Ingresar</Text>
       </TouchableOpacity>
@@ -48,6 +52,8 @@ const submitForm = () => {}
     </View>
   );
 }
+
+
 const styles = StyleSheet.create({
   inputStyle: {
     marginTop: 20,
