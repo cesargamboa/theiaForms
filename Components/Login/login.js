@@ -1,11 +1,15 @@
 import React from 'react';
 import { backgroundColor, buttonSkyBlue } from '../../assets/colors/colors';
 import { TextInput, Text, View, Image,StyleSheet, TouchableOpacity } from 'react-native';
+import { authenticate } from './auth';
 
 export default function UselessTextInput(props) {
   const [user, onChangeUser] = React.useState('');
   const [password, onChangePass] = React.useState('');
-const submitForm = () => {}
+const submitForm = () => {
+  authenticate("cesargamboaavel@gmail.com","hola1234");
+  // props.navigation.navigate('Home')
+}
   return (
     <View style={styles.container}>
     <Image source={require('../../assets/theia-track1-01.png')}
@@ -30,7 +34,7 @@ const submitForm = () => {}
     <View>
     <TouchableOpacity
         style={styles.submitButton}
-        onPress={() => props.navigation.navigate('Home')}
+        onPress={submitForm}
       >
         <Text style={styles.textButton}>Ingresar</Text>
       </TouchableOpacity>
@@ -38,6 +42,8 @@ const submitForm = () => {}
     </View>
   );
 }
+
+
 const styles = StyleSheet.create({
   inputStyle: {
     marginTop: 20,
