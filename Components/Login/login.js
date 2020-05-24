@@ -7,8 +7,8 @@ export default function UselessTextInput(props) {
   const [user, onChangeUser] = React.useState('');
   const [password, onChangePass] = React.useState('');
 const submitForm = () => {
-  authenticate("cesargamboaavel@gmail.com","hola1234");
-  // props.navigation.navigate('Home')
+  authenticate(user,password);
+  props.navigation.navigate('Home')
 }
   return (
     <View style={styles.container}>

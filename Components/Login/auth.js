@@ -16,6 +16,7 @@ export const authenticate = (userName, passwordInput) => {
         records.forEach(function (record) {
             console.log("aqui2")
             const password = record.get('password');
+            const status = ''
             console.log("aqui3",password,userName,passwordInput)
             if (password === passwordInput) {
                 if (status === 'Inactivo') {
