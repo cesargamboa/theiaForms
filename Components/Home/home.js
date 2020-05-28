@@ -4,6 +4,7 @@ import { backgroundColor, boxShadow } from '../../assets/colors/colors';
 import { Icon } from 'react-native-elements'
 import { Text, View, Image,StyleSheet, TouchableOpacity , Dimensions} from 'react-native';
 import Header from '../Header/header';
+import { _retrieveData } from '../Login/initialStore';
 
 const options = {
   enableHighAccuracy: true,
@@ -17,7 +18,7 @@ const home = (props) => {
     props.navigation.navigate('Perfil')
   }
   return <View style={styles.container}>
-  <Header userName="" goToProfile={goToProfile}/>
+  <Header userName={_retrieveData('Nombre')} goToProfile={goToProfile}/>
   <View style={styles.body}>
   <FadeInAnimation duration={2000}>
     <TouchableOpacity style={styles.textButton} onPress={() => props.navigation.navigate('Registro')}>
@@ -28,7 +29,7 @@ const home = (props) => {
       iconStyle={{backgroundColor : '#20c933', marginRight: 20, borderRadius: 2, padding: 2}}
       color='#fff'
     />
-      <Text style={{color: '#333', fontSize: 18}}>Registro Nuevo</Text>
+      <Text style={{color: '#333', fontSize: 18}}>Planillas</Text>
     </TouchableOpacity>
   </FadeInAnimation>
   <FadeInAnimation duration={3000}>

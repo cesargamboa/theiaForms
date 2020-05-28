@@ -1,11 +1,21 @@
 import React from 'react';
 import { Icon } from 'react-native-elements'
 import { Text, View, Image,StyleSheet, TouchableOpacity , Dimensions} from 'react-native';
+import { _retrieveData } from '../Login/initialStore';
 
 
 const header = (props) => {
+  const [userName, setUserName] =  React.useState('')
+
+  React.useEffect(() => {
+    const getUserData = async () => {
+      const result = await _retrieveData('Nombre')
+      setUserName(result)
+    }
+    getUserData();
+  }, [])
   return <View style={styles.container}>
-  <Text>{props.userName}</Text>
+  <Text>{userName}</Text>
 <Icon
       name='user'
       type='evilicon'

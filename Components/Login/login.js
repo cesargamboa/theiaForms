@@ -1,17 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { backgroundColor, buttonSkyBlue } from '../../assets/colors/colors';
-import { TextInput, Text, View, Image,StyleSheet, TouchableOpacity } from 'react-native';
-import { authenticate } from './auth';
+import axios from 'axios'
+import { TextInput, Text, View, Image,StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { _retrieveData, _storeData } from './initialStore';
 
 export default function UselessTextInput(props) {
-  const [user, onChangeUser] = React.useState('');
-  const [password, onChangePass] = React.useState('');
-const submitForm = () => {
-  authenticate(user,password);
-  props.navigation.navigate('Home')
+  const [user, onChangeUser] = useState('');
+  const [password, onChangePass] = useState('');
+  const [errorMessage, onChangeError] = useState('');
+  const [loading , setLoading] = useState(false)
+const submitForm =  async () =>  {
+  setLoading(true)
+  const users = await axios.get('https://api.airtable.com/v0/app4MqpvYJy5fPAhr/Usuarios?api_key=keyNmRNp3M2oIpnfF')
+  const { records } = users.data
+  const userData = records.filter(result => ((result.fields.Usuario === user)&&(result.fields.password === password)))
+  if(userData.length > 0){
+    setLoading(false)
+    _storeData('Nombre', userData[0].fields.Nombre)
+    props.navigation.navigate('Home')
+  }
+  else{
+    setLoading(false)
+    onChangeError('Correo o contrasena incorrectos')
+  }
 }
   return (
     <View style={styles.container}>
+    <Text>{loading ? <ActivityIndicator size="large" color="#00ff00" /> : ''}</Text>
+    <Text style={errorMessage ? styles.error : ''}>{errorMessage}</Text>
     <Image source={require('../../assets/theia-track1-01.png')}
   style={{ width: 110, height: 50.5, marginTop: -100, marginBottom: 30, position: 'relative' }}></Image>
     <View style={styles.inputStyle}>
@@ -47,6 +63,16 @@ const submitForm = () => {
 const styles = StyleSheet.create({
   inputStyle: {
     marginTop: 20,
+  },
+  error: {
+    color: '#fff',
+    backgroundColor: '#fcb400',
+    position: 'absolute',
+    top: 10,
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 15,
+    padding: 15
   },
   inputBorder: {
     borderBottomColor: `rgba(0,0,0,0.1)`,
