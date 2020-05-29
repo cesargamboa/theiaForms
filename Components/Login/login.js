@@ -26,7 +26,7 @@ const submitForm =  async () =>  {
 }
   return (
     <View style={styles.container}>
-    <Text>{loading ? <ActivityIndicator size="large" color="#00ff00" /> : ''}</Text>
+    <View>{loading ? <ActivityIndicator size="large" color="#00ff00" /> : null}</View>
     <Text style={errorMessage ? styles.error : ''}>{errorMessage}</Text>
     <Image source={require('../../assets/theia-track1-01.png')}
   style={{ width: 110, height: 50.5, marginTop: -100, marginBottom: 30, position: 'relative' }}></Image>

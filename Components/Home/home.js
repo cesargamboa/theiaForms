@@ -1,6 +1,6 @@
 import React from 'react';
 import FadeInAnimation from '../../shared/fadeInAnimation';
-import { backgroundColor, boxShadow } from '../../assets/colors/colors';
+import { boxShadow, backgroundColor } from '../../assets/colors/colors';
 import { Icon } from 'react-native-elements'
 import { Text, View, Image,StyleSheet, TouchableOpacity , Dimensions} from 'react-native';
 import Header from '../Header/header';
