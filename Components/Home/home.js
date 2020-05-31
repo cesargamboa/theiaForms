@@ -2,9 +2,10 @@ import React from 'react';
 import FadeInAnimation from '../../shared/fadeInAnimation';
 import { boxShadow, backgroundColor } from '../../assets/colors/colors';
 import { Icon } from 'react-native-elements'
-import { Text, View, Image,StyleSheet, TouchableOpacity , Dimensions} from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Header from '../Header/header';
 import { _retrieveData } from '../Login/initialStore';
+import { unsubscribe } from '../../shared/checkConnection';
 
 const options = {
   enableHighAccuracy: true,
@@ -18,7 +19,7 @@ const home = (props) => {
     props.navigation.navigate('Perfil')
   }
   return <View style={styles.container}>
-  <Header userName={_retrieveData('Nombre')} goToProfile={goToProfile}/>
+  <Header userName={_retrieveData('Nombre')} mode= {unsubscribe} goToProfile={goToProfile}/>
   <View style={styles.body}>
   <FadeInAnimation duration={2000}>
     <TouchableOpacity style={styles.textButton} onPress={() => props.navigation.navigate('Registro')}>
@@ -117,6 +118,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     borderBottomColor: boxShadow,
     borderBottomWidth: 2,
+    color: 'hsl(0,0%,20%)',
    paddingTop: 20,
    paddingBottom: 20
   }

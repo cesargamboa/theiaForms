@@ -15,7 +15,8 @@ const header = (props) => {
     getUserData();
   }, [])
   return <View style={styles.container}>
-  <Text>{userName}</Text>
+  <Text style={styles.userName}>{userName}</Text>
+  <Text style={styles.mode}>{props.mode ? 'Online Mode' : 'Offline Mode'}</Text>
 <Icon
       name='user'
       type='evilicon'
@@ -39,5 +40,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     backgroundColor: '#fff',
   },
+  mode:{
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    padding: 2,
+    fontSize: 11,
+    borderRadius: 11,
+    color: 'hsl(0,0%,20%)'
+  },
+  userName: {
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    padding: 2,
+    fontSize: 13,
+    borderRadius: 11,
+    color: 'hsl(0,0%,20%)'
+  }
 });
 export default header;

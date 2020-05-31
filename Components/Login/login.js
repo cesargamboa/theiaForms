@@ -3,6 +3,16 @@ import { backgroundColor, buttonSkyBlue } from '../../assets/colors/colors';
 import axios from 'axios'
 import { TextInput, Text, View, Image,StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { _retrieveData, _storeData } from './initialStore';
+const API_KEY = "keyNmRNp3M2oIpnfF"
+const GENERERIC_URL = "https://api.airtable.com/v0/app4MqpvYJy5fPAhr"
+
+const generateURL = (tableName, itemId)=>{
+  let url = `${GENERERIC_URL}/${tableName}?api_key=${API_KEY}`;
+  if(itemId){
+    url =  `${GENERERIC_URL}/${tableName}/${itemId}?api_key=${API_KEY}`;
+  }
+  return url;
+}
 
 export default function UselessTextInput(props) {
   const [user, onChangeUser] = useState('');
@@ -11,12 +21,15 @@ export default function UselessTextInput(props) {
   const [loading , setLoading] = useState(false)
 const submitForm =  async () =>  {
   setLoading(true)
-  const users = await axios.get('https://api.airtable.com/v0/app4MqpvYJy5fPAhr/Usuarios?api_key=keyNmRNp3M2oIpnfF')
+  const users = await axios.get(generateURL('Usuarios'))
+  const fincas =  await axios.get(generateURL('Fincas', 'recVDgoysWjhnGwc4'))
+  console.log('Fincas', fincas.data)
   const { records } = users.data
   const userData = records.filter(result => ((result.fields.Usuario === user)&&(result.fields.password === password)))
   if(userData.length > 0){
     setLoading(false)
     _storeData('Nombre', userData[0].fields.Nombre)
+    console.log('UserData', userData[0].fields.Finca)
     props.navigation.navigate('Home')
   }
   else{
