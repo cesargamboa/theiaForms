@@ -10,6 +10,9 @@ import Home from './Components/Home/home.js'
 import Header from './Components/Header/header'
 import RecoleccionDatos from './Components/RecoleccionDatos/recolectarDatosLote'
 import Perfil from './Components/PerfilUsuario/perfil'
+import Planillas from './Components/Planillas/planillas';
+import Calendario from './Components/Calendario/calendario';
+import Fincas from'./Components/Fincas/fincas';
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -42,6 +45,15 @@ export default function App() {
       </Stack.Screen>
       <Stack.Screen name="Perfil">
         {props => <Perfil {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name="Fincas">
+        {props => <Fincas {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name="Calendario">
+        {props => <Calendario {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name="Planillas">
+        {props => <Planillas {...props} />}
       </Stack.Screen>
       </Stack.Navigator>
       </NavigationContainer>
