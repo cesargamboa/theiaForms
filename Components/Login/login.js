@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     backgroundColor: '#fcb400',
     position: 'absolute',
-    top: 10,
+    top: 45,
     width: '100%',
     textAlign: 'center',
     fontSize: 15,
