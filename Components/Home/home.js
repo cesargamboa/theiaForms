@@ -29,26 +29,23 @@ const home = (props) => {
       setUserId(idUsuario)
       if(typeof(userID) === 'string'){
         setFincas([])
-        const user = await axios.get(generateURL('Usuarios', userID))
-        // all data is coming here: console.log('User data!', user.data)
-        // we should use this later to store all the data
+        let user
+        if(unsubscribe){
+          user = await axios.get(generateURL('Usuarios', userID))
+        }
         if(user.data.fields){
           user.data.fields.Finca.map(async (finca, i) => {
             // issue here, storing multiple times the data
             const fincaCall = await axios.get(generateURL('Fincas', finca))
-            let tempState = [...fincasUsuario, fincaCall.data.fields];
+            let tempState = [fincaCall.data.fields];
             setFincas(tempState)
+            await _deleteData('Fincas')
+            await _storeData('Fincas', JSON.stringify(tempState))
           })
         }
       }
     }
-    const saveUserData = async () => {
-      console.log('Fincas Usuario: ', fincasUsuario.length)
-      await _deleteData('Fincas')
-      await _storeData('Fincas', JSON.stringify(fincasUsuario))
-    }
     getUserData();
-    saveUserData();
   }, [])
   return <View style={styles.container}>
   <Header userName={_retrieveData('Nombre')} mode= {unsubscribe} goToProfile={goToProfile}/>

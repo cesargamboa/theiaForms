@@ -30,8 +30,8 @@ export default function App() {
       userName === ''?  
        <View><ActivityIndicator size="large" color="#00ff00" /></View> :
        <NavigationContainer style={styles.container}>
-      <Stack.Navigator headerMode="none" initialRouteName={ userName === null?  "Login" : "Home"}>
-      <Stack.Screen name="Login">
+      <Stack.Navigator initialRouteName={ userName === null?  "Login" : "Home"}>
+      <Stack.Screen options={{headerShown: false}} name="Login">
         {props => <Login {...props} />}
       </Stack.Screen>
       <Stack.Screen name="Home">

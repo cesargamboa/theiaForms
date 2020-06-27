@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { backgroundColor, buttonSkyBlue } from '../../assets/colors/colors';
 import axios from 'axios'
 import { TextInput, Text, View, Image,StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
@@ -23,6 +23,7 @@ const submitForm =  async () =>  {
     _storeData('IdUsuario', userData[0].id)
     props.navigation.navigate('Home')
   }
+
   else{
     setLoading(false)
     onChangeError('Correo o contrasena incorrectos')

@@ -12,7 +12,6 @@ const datosLote = (props) => {
   const [ longintud, setLong] = React.useState(0);
   const obtenerCoordenadas = () => {
     const success = (pos) => {
-      console.log('Here')
       var crd = pos.coords;
     
       console.log('Your current position is:');
