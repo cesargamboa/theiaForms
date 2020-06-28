@@ -4,7 +4,7 @@ import { boxShadow, backgroundColor } from '../../assets/colors/colors';
 import { Icon } from 'react-native-elements'
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Header from '../Header/header';
-import { _retrieveData, _storeData, _deleteData } from '../Login/initialStore';
+import { _retrieveData, _storeData, _deleteData, retrieveDataPromise, storeDataPromise } from '../Login/initialStore';
 import { unsubscribe } from '../../shared/checkConnection';
 import { generateURL } from '../../shared/airtableConfig';
 import axios from 'axios'
@@ -19,33 +19,31 @@ const options = {
 const home = (props) => {
   const [userID, setUserId] =  React.useState('')
   const [ fincasUsuario, setFincas ] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
   const goToProfile =  () => {
     props.navigation.navigate('Perfil')
   }
   React.useEffect(() => {
     // check if user is online first
-    const getUserData = async () => {
-      const idUsuario = await _retrieveData('IdUsuario')
-      setUserId(idUsuario)
-      if(typeof(userID) === 'string'){
-        setFincas([])
-        let user
-        if(unsubscribe){
-          user = await axios.get(generateURL('Usuarios', userID))
-        }
-        if(user.data.fields){
-          user.data.fields.Finca.map(async (finca, i) => {
-            // issue here, storing multiple times the data
-            const fincaCall = await axios.get(generateURL('Fincas', finca))
-            let tempState = [fincaCall.data.fields];
-            setFincas(tempState)
-            await _deleteData('Fincas')
-            await _storeData('Fincas', JSON.stringify(tempState))
-          })
-        }
-      }
-    }
-    getUserData();
+    retrieveDataPromise('IdUsuario')
+    .then(userID => {
+      return axios.get(generateURL('Usuarios', userID))
+    })
+    .then((userData)=>{
+      console.log('User data', userData.data.fields)
+      return userData.data.fields.Finca;
+    })
+    .then(async (fincas) => {
+      _deleteData('Fincas');
+      return Promise.all(fincas.map((f) => axios.get(generateURL('Fincas', f))))
+    })
+    .then((fincas) => {
+      return storeDataPromise('Fincas', JSON.stringify(fincas))
+    })
+    .then((e) => {
+      setLoading(false)
+    })
+    .catch(e => console.log(e))
   }, [])
   return <View style={styles.container}>
   <Header userName={_retrieveData('Nombre')} mode= {unsubscribe} goToProfile={goToProfile}/>

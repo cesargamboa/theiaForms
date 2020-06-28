@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, ActivityIndicator } from 'react-native';
-import { _retrieveData } from '../Login/initialStore';
+import { _retrieveData, retrieveDataPromise } from '../Login/initialStore';
 import { unsubscribe } from '../../shared/checkConnection';
 import Header from '../Header/header';
 const fincas = (props) => {
@@ -10,6 +10,9 @@ const fincas = (props) => {
   const [ fincas, setFincas ] =  React.useState([])
   const [ loading, setLoading ] =  React.useState(true)
   React.useEffect(()=> {
+    retrieveDataPromise('Fincas')
+    .then(e => console.log('e', JSON.parse(e)))
+
     const getFincasFromStorage = async () =>{
       const fincasS  = await _retrieveData('Fincas');
       setLoading(false)
@@ -26,12 +29,12 @@ const fincas = (props) => {
         </View>
      { loading && <ActivityIndicator size="large" color="#00ff00" /> }
      {
-       fincas.length > 0 ? 
+       (fincas && fincas.length > 0) ? 
         fincas.map(((finca, i) => 
         <View key={i} style={{display: 'flex', flexDirection: 'row', marginLeft: 10, marginRight: 10}}>
-          <Text style={{color: '#333', fontSize: 18, flex: 1}}>{finca.Nombre}</Text>
-          <Text style={{color: '#333', fontSize: 18, flex: 1}}>{finca.Localidad}</Text>
-          <Text style={{color: '#333', fontSize: 18, flex: 1}}>{finca.Propietario}</Text>
+          <Text style={{color: '#333', fontSize: 18, flex: 1}}>{finca.data.fields.Nombre}</Text>
+          <Text style={{color: '#333', fontSize: 18, flex: 1}}>{finca.data.fields.Localidad}</Text>
+          <Text style={{color: '#333', fontSize: 18, flex: 1}}>{finca.data.fields.Propietario}</Text>
         </View>))
        : <Text style={{color: '#333', fontSize: 18}}>No se encontraron fincas</Text>
      }

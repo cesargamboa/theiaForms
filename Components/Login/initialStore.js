@@ -10,6 +10,15 @@ export const _storeData = async (key, data) => {
     console.log('Error saving data', error);
   }
 };
+export const storeDataPromise = (key, data) => {
+  return AsyncStorage.setItem(
+    `${key}`,
+    `${data}`
+  );
+}
+export const retrieveDataPromise = (item) => {
+  return AsyncStorage.getItem(`${item}`);
+}
 export const _retrieveData = async (item) => {
   try {
     const value = await AsyncStorage.getItem(`${item}`);
@@ -30,4 +39,7 @@ export const _deleteData = async (itemId) => {
     // Error retrieving data
     console.log(error.message);
   }
+}
+export const _deleteDataPromise =  (itemId) => {
+  return AsyncStorage.removeItem(itemId);
 }
