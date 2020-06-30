@@ -19,6 +19,8 @@ const options = {
 const home = (props) => {
   const [userID, setUserId] =  React.useState('')
   const [ fincasUsuario, setFincas ] = React.useState([])
+  const [lotes, setLotes] = React.useState([])
+  const [lotesObj, setLotesObj] = React.useState([{}])
   const [loading, setLoading] = React.useState(true)
   const goToProfile =  () => {
     props.navigation.navigate('Perfil')
@@ -36,11 +38,26 @@ const home = (props) => {
       return Promise.all(fincas.map((f) => axios.get(generateURL('Fincas', f))))
     })
     .then((fincas) => {
-      return storeDataPromise('Fincas', JSON.stringify(fincas))
+      let lotes = [];
+      fincas.map((finca) => {
+        lotes.push(finca.data.fields.Lotes)
+      })
+      return Promise.all([setLotes(lotes), storeDataPromise('Fincas', JSON.stringify(fincas))])
+    })
+    .then(async() => {
+      let lotTemp = []
+      await lotes.flat().map((l) => {
+         axios.get(generateURL('Lotes', l))
+        .then((lote) => {
+          lotTemp.push(lote.data.fields)
+        })
+      })
+      return setLotesObj(lotTemp)
     })
     .then((e) => {
-      setLoading(false)
+      return storeDataPromise('Lotes', JSON.stringify(lotesObj))
     })
+    .then(() =>  setLoading(false))
     .catch(e => console.log(e))
   }, [])
   return <View style={styles.container}>
