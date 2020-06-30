@@ -30,11 +30,9 @@ const home = (props) => {
       return axios.get(generateURL('Usuarios', userID))
     })
     .then((userData)=>{
-      console.log('User data', userData.data.fields)
       return userData.data.fields.Finca;
     })
-    .then(async (fincas) => {
-      _deleteData('Fincas');
+    .then((fincas) => {
       return Promise.all(fincas.map((f) => axios.get(generateURL('Fincas', f))))
     })
     .then((fincas) => {

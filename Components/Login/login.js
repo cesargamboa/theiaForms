@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { backgroundColor, buttonSkyBlue } from '../../assets/colors/colors';
 import axios from 'axios'
 import { TextInput, Text, View, Image,StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { _retrieveData, _storeData } from './initialStore';
+import { _retrieveData, _storeData, storeDataPromise } from './initialStore';
 import { generateURL } from '../../shared/airtableConfig';
 
 export default function UselessTextInput(props) {
@@ -13,15 +13,18 @@ export default function UselessTextInput(props) {
 const submitForm =  async () =>  {
   setLoading(true)
   const users = await axios.get(generateURL('Usuarios'))
-  const fincas =  await axios.get(generateURL('Fincas', 'recVDgoysWjhnGwc4'))
+
   const { records } = users.data
   const userData = records.filter(result => ((result.fields.Usuario === user)&&(result.fields.password === password)))
   if(userData.length > 0){
     setLoading(false)
-    _storeData('Nombre', userData[0].fields.Nombre)
-    _storeData('Usuario', userData[0].fields.Usuario)
-    _storeData('IdUsuario', userData[0].id)
-    props.navigation.navigate('Home')
+    storeDataPromise('Nombre', userData[0].fields.Nombre)
+    .then(() => {
+      return storeDataPromise ('Usuario', userData[0].fields.Usuario)
+    })
+    .then(() => storeDataPromise('IdUsuario', userData[0].id) )
+    .then(() => props.navigation.navigate('Home'))
+    .catch(e => console.log(e))
   }
 
   else{
