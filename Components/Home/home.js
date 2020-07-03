@@ -44,24 +44,26 @@ const home = (props) => {
       })
       return Promise.all([setLotes(lotes), storeDataPromise('Fincas', JSON.stringify(fincas))])
     })
-    .then(async() => {
-      let lotTemp = []
-      await lotes.flat().map((l) => {
-         axios.get(generateURL('Lotes', l))
-        .then((lote) => {
-          lotTemp.push(lote.data.fields)
-        })
-      })
-      return setLotesObj(lotTemp)
+    .then(() => {
+      return Promise.all(lotes.flat().map((l) => {
+        return axios.get(generateURL('Lotes', l))
+     }))
     })
     .then((e) => {
+      let temp = [];
+      e.map(lote => {
+        temp.push(lote.data.fields)
+      })
+      return setLotesObj(temp)
+    })
+    .then(() => {
       return storeDataPromise('Lotes', JSON.stringify(lotesObj))
     })
     .then(() =>  setLoading(false))
     .catch(e => console.log(e))
   }, [])
   return <View style={styles.container}>
-  <Header userName={_retrieveData('Nombre')} mode= {unsubscribe} goToProfile={goToProfile}/>
+ <Header userName={_retrieveData('Nombre')} mode= {unsubscribe} goToProfile={goToProfile}/>
   <View style={styles.body}>
   <FadeInAnimation duration={2000}>
     <TouchableOpacity style={styles.textButton} onPress={() => props.navigation.navigate('Planillas')}>
@@ -101,8 +103,7 @@ const home = (props) => {
       <Text style={{color: '#333', fontSize: 18}}>Calendario</Text>
     </TouchableOpacity>
   </FadeInAnimation>
-  </View>
-  </View>
+  </View></View>
 }
 const styles = StyleSheet.create({
   container: {
